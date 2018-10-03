@@ -273,6 +273,12 @@ catkin_make
 ~~~
 
 ### RoVI実行
+1. Network設定
+デフォルトのカメラのIPアドレスは**192.168.222.1**です。PC側もそれに合わせて設定します。
+
+カメラはラージパケットで転送してくるので、**MTU=9000**に設定します。
+
+2. Launch
 ~~~
 roslaunch rovi ycamctl.js ycam3
 ~~~
