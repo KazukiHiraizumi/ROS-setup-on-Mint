@@ -1,5 +1,5 @@
 ﻿# ROSのPCのセットアップ
-====
+
 ## インストール LinuxMint
 
 ### USBブート
@@ -47,10 +47,10 @@ sudo update-grub
 ~~~
 でエラーがないことを確認し再起動。
 
-====
+======
 ## 初期設定 LinuxMint
 
-1. アップグレード
+### アップグレード
 ~~~
 sudo apt upgrade
 ~~~
@@ -59,7 +59,7 @@ sudo apt upgrade
 sudo apt update
 ~~~
 
-2. ツール・ライブラリの追加
+### ツール・ライブラリの追加
 
 後々のために以下を追加する
   - g++
@@ -68,7 +68,7 @@ sudo apt update
   - intltool
   - libgsreamer*-dev
 
-3. 電源管理
+### 電源管理
 
 スタートメニュー⇒設定⇒電源管理
   - 一般  
@@ -80,12 +80,12 @@ sudo apt update
   - Secuity  
   LightLocker"しない"を選択
 
-4. デスクトップ切り替え
+### デスクトップ切り替え
 
 タスクバー⇒パネル⇒新しいアイテムの追加  
 ワークスペーススイッチャを追加
 
-5. Nodejsインストール
+### Nodejsインストール
 
 現時点(Sep18)でのHeadはNode9なので9を入れる
 ~~~
@@ -93,14 +93,19 @@ cd ~
 curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
 sudo apt-get install nodejs
 ~~~
-====
+よく使うパッケージも追加
+~~~
+npm install mathjs
+~~~
+
+======
 
 ## インストール ROS
 
 ROSのリリースはKineticが前提です。  
 http://wiki.ros.org/kinetic/Installation/Ubuntuに手順がありますが、Mintに入れるので若干修正が要ります。
 
-1. Repos設定
+### Repos設定
 
 先のページでは
 ~~~
@@ -112,14 +117,14 @@ sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu xenial main" > /etc/apt
 ~~~
 とします。
 
-2. Key設定
+### Key設定
 ~~~
 sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
 ~~~
 もしエラーになったら、キーサーバを"hkp://pgp.mit.edu:80"とか"hkp://keyserver.ubuntu.com:80"でやってみるそう。
 
 
-3. インストール
+### インストール
 
 フルセットでOKです
 ~~~
@@ -127,7 +132,7 @@ sudo apt-get update
 sudo apt-get install ros-kinetic-desktop-full
 ~~~
 
-4. rosdep初期化
+### rosdep初期化
 ~~~
 sudo rosdep init
 rosdep update
@@ -137,54 +142,83 @@ rosdep update
 rosdep --os=ubuntu:xenial  ....
 ~~~
 
+### catkin初期化
+~~~
+cd ~
+mkdir -p catkin_ws/src
+cd catkin_ws/src
+catkin_init_workspace
+~~~
 
-
-
-①Ubuntuバージョン
-
-ROSの推奨バージョンはkineticいうやつ
-対応するUbuntuは15.10か16.04(xenial)。16.04がLTSなのでこっち。Mintなら18.2(sonya)
-
-②追加で必要なもの
-・G++(sudo apt-get install g++
-・Git(sudo apt-get inslall git
-
-③インストールkinetic
-http://wiki.ros.org/kinetic/Installation/Ubuntu
-のとおり・・・
-！apt updateの前に
-/etc/apt/sources.list.d/ros-latest.list
-のソースがsonyaになっていたらxenialに書き換える
-
-④apt updateで arm64..404 エラーが出る
-Jetpackがインストール済だとこういうややこしいことになる。
-とりあえず以下のように一旦Armのクロス環境を消すしかない？？
-<ans>
-dpkg --get-selections | grep i386 | awk '{print $1}'
-
-And then if happy with them being removed, run
-
-apt-get remove --purge `dpkg --get-selections | grep i386 | awk '{print $1}'`
-
-And then retry the
-
-dpkg --remove-architecture i386
-
-apt-get updatesource /opt/ros/kinetic/setup.bash
-source catkin_ws/devel/setup.bash
-export ROS_HOSTNAME=localhost
-export ROS_MASTER_URI=http://localhost:11311
-
-</ans>
-
-⑤アカウントの初期設定
-.bashrcの最後に以下を入れた方がよい。ROSワークスペースは*_wsとする。最後の2行はスタンドアロンで使うとき。
+### アカウントの初期設定
+.bashrcの最後に以下を入れる
+~~~
+export NODE_PATH=/usr/lib/node_modules
+export PYTHONPATH=/usr/local/lib/python2.7/dist-packages:$PYTHONPATH
 source /opt/ros/kinetic/setup.bash
-for rcsetup in *_ws/devel/setup.bash
-do
-	source $rcsetup
-done
+source ~/catkin_ws/devel/setup.bash
 export ROS_HOSTNAME=localhost
 export ROS_MASTER_URI=http://localhost:11311
 
+### Pythonパッケージ追加
 
+pipがなければまずpipをインストール
+~~~
+sudo apt install python-pip python-dev
+~~~
+ROSを入れるとOpenCVなどかなりのパッケージが追加される。それ以外では  
+- scipy
+~~~
+pip install scipy
+~~~
+- pybind11
+~~~
+sudo -H pip install pybind11
+~~~
+- Open3D
+~~~
+pip install open3d-python
+~~~
+
+======
+## ROS GigEカメラインストール
+### Aravisライブラリのインストール
+
+http://ftp.gnome.org/pub/GNOME/sources/aravis/0.4/  から  "aravis-0.4.1.tar.xz" をダウンロード。curlコマンドで直接DLしてもいい
+~~~
+curl http://ftp.gnome.org/pub/GNOME/sources/aravis/0.4/aravis-0.4.1.tar.xz >aravis-0.4.1.tar.xz
+~~~
+展開してaravis...以下にcdし
+~~~
+./configure
+make
+sudo make install
+~~~
+カメラを接続し
+~~~
+arv-tool-0.4
+~~~
+でカメラを認識できればOK
+
+### camera_aravisパッケージのインストール
+~~~
+cd ~/catkin_ws/src
+git clone https://github.com/YOODS/camera_aravis.git
+~~~
+オリジナルのcamera_aravisから以下変更有り
+- スキャンタイムを1s⇒0.02s
+- Get/SetGregサービス追加
+
+ビルドは
+~~~
+cd ~/catkin_ws/src
+catkin_make
+~~~
+
+OKならViewerで見てみる
+~~~
+rosrun image_view image_view image:=/camera/image_raw
+~~~
+
+======
+## RoVI インストール
