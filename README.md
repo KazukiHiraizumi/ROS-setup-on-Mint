@@ -1,5 +1,9 @@
-﻿# ROSのPCのセットアップ
+﻿# ROSをMintで使おう
 
+Unityの独りよがりに嫌気がさした人は、純正Ubuntuはぶち消して、Mintをインストールしよう。  
+MintもUbuntu派生なので、ROSのセットアップはほぼ同じ。  
+Desktopは**普通のもの**が使える。これ大事！
+ 
 ## インストール LinuxMint
 
 ### USBブート
@@ -159,6 +163,7 @@ source /opt/ros/kinetic/setup.bash
 source ~/catkin_ws/devel/setup.bash
 export ROS_HOSTNAME=localhost
 export ROS_MASTER_URI=http://localhost:11311
+~~~
 
 ### Pythonパッケージ追加
 
@@ -180,7 +185,6 @@ sudo -H pip install pybind11
 pip install open3d-python
 ~~~
 
-======
 ## ROS GigEカメラインストール
 ### Aravisライブラリのインストール
 
