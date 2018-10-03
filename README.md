@@ -225,4 +225,56 @@ rosrun image_view image_view image:=/camera/image_raw
 ~~~
 
 ======
-## RoVI インストール
+## RoVIのインストール
+### 準備
+1. rosnodejsをインストール
+~~~
+cd ~
+npm install rosnodejs
+~~~
+- このパッケージはパッチが要るので注意。以下のようにパッチします。
+~~~
+cd ~
+git clone https://github.com/RethinkRobotics-opensource/rosnodejs
+cd ~/node_modules/rosnodejs
+rm -rf dist
+cp -a ~/rosnodejs/src/ dist
+~~~
+2. js-yamlをインストール
+~~~
+cd ~
+npm install js-yaml
+~~~
+### RoVIのインストール
+1. Gitからチェックアウト
+~~~
+ git clone https://github.com/YOODS/rovi.git
+ git checkout -m matriel
+~~~
+2. Eigenをインストール
+~~~
+cd ~/catkin_ws/src/rovi
+wget http://bitbucket.org/eigen/eigen/get/3.3.4.tar.gz
+tar xvzf 3.3.4.tar.gz
+mkdir include
+mv eigen-eigen-5a0156e40feb/Eigen/ include
+rm -rf eigen-eigen-5a0156e40feb/ 3.3.4.tar.gz
+~~~
+3. voxel...をビルド
+~~~
+cd voxel-noise_reduction
+make
+cp yodpy2.so ~/catkin_ws/devel/lib/python2.7/dist-packages/
+~~~
+4. 全部ビルドしてみよう
+~~~
+cd ~/catkin_ws
+catkin_make
+~~~
+
+### RoVI実行
+~~~
+roslaunch rovi ycamctl.js ycam3
+~~~
+### Topics(to subscribe)
+### Topics(to publish)
