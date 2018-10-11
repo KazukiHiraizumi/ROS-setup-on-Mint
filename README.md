@@ -28,11 +28,17 @@ sudo update-grub
 ### 再起動
 
 再起動を確認。！！もし起動できないときは、
+1. USBから起動
 - ブートUSBから起動しgrubメニューを出す(起動時にESCキーを押すなど)
 - カーネルオプションを編集する("e"キーを押すなど、画面指示を見ること)
 - オプションの"boot=casper"を"root=/dev/sda2"に変更
 - 起動する(F10を押すなど、画面指示を見ること)
 - 再起動できたら、4のupdate-grubのログを精査する
+
+2. BIOS設定
+- SecureBootをDisableにする
+- 先にUEFIブートをDisableにしないとできないBIOSもある
+- どちらもできないなら一旦すべてのBIOS設定をDefaultに戻してから再起動
 
 ### 画面チラつき
 
@@ -203,6 +209,17 @@ sudo make install
 arv-tool-0.4
 ~~~
 でカメラを認識できればOK
+
+!!エラー
+
+ld.so.conf設定が反映されていないと以下のようなエラーが出る
+~~~
+arv-tool-0.4: error while loading shared libraries: libaravis-0.4.so.0: cannot open shared object file: No such file or directory
+~~~
+このようなときはldconfigを実行する
+~~~
+sudo ldconfig
+~~~
 
 ### camera_aravisパッケージのインストール
 ~~~
