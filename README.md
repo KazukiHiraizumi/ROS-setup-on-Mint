@@ -163,12 +163,12 @@ catkin_init_workspace
 ### アカウントの初期設定
 .bashrcの最後に以下を入れる
 ~~~
-export NODE_PATH=/usr/lib/node_modules
-export PYTHONPATH=/usr/local/lib/python2.7/dist-packages:$PYTHONPATH
 source /opt/ros/kinetic/setup.bash
 source ~/catkin_ws/devel/setup.bash
 export ROS_HOSTNAME=localhost
 export ROS_MASTER_URI=http://localhost:11311
+export NODE_PATH=/usr/lib/node_modules
+export PYTHONPATH=/usr/local/lib/python2.7/dist-packages:$PYTHONPATH
 ~~~
 
 ### Pythonパッケージ追加
