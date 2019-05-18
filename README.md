@@ -77,6 +77,9 @@ sudo apt update
   - automake
   - intltool
   - libgsreamer*-dev
+~~~
+sudo apt install g++ git automake intltool libgstreamer*-dev
+~~~
 
 ### 電源管理
 
@@ -95,17 +98,22 @@ sudo apt update
 タスクバー⇒パネル⇒新しいアイテムの追加  
 ワークスペーススイッチャを追加
 
-### Nodejsインストール
+## ソフトウェア追加
+### Chrome　　
+デフォルトのFoxがGithubのサポート外になっているので、ブラウザを更新
+~~~
+wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
+sudo apt-get update 
+sudo apt-get install google-chrome-stable
+~~~
 
+### Nodejsインストール　　
 現時点(Sep18)でのHeadはNode9なので9を入れる
 ~~~
 cd ~
 curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
 sudo apt-get install nodejs
-~~~
-よく使うパッケージも追加
-~~~
-npm install mathjs
 ~~~
 
 ======
@@ -177,127 +185,11 @@ pipがなければまずpipをインストール
 ~~~
 sudo apt install python-pip python-dev
 ~~~
-ROSを入れるとOpenCVなどかなりのパッケージが追加される。それ以外では  
-- scipy
-~~~
-pip install scipy
-~~~
-- pybind11
-~~~
-sudo -H pip install pybind11
-~~~
-- Open3D
-~~~
-pip install open3d-python
-~~~
-
-## ROS GigEカメラインストール
-### Aravisライブラリのインストール
-
-http://ftp.gnome.org/pub/GNOME/sources/aravis/0.4/  から  "aravis-0.4.1.tar.xz" をダウンロード。curlコマンドで直接DLしてもいい
-~~~
-curl http://ftp.gnome.org/pub/GNOME/sources/aravis/0.4/aravis-0.4.1.tar.xz >aravis-0.4.1.tar.xz
-~~~
-展開してaravis...以下にcdし
-~~~
-./configure
-make
-sudo make install
-~~~
-カメラを接続し
-~~~
-arv-tool-0.4
-~~~
-でカメラを認識できればOK
-
-!!エラー
-
-ld.so.conf設定が反映されていないと以下のようなエラーが出る
-~~~
-arv-tool-0.4: error while loading shared libraries: libaravis-0.4.so.0: cannot open shared object file: No such file or directory
-~~~
-このようなときはldconfigを実行する
-~~~
-sudo ldconfig
-~~~
-
-### camera_aravisパッケージのインストール
-~~~
-cd ~/catkin_ws/src
-git clone https://github.com/YOODS/camera_aravis.git
-~~~
-オリジナルのcamera_aravisから以下変更有り
-- スキャンタイムを1s⇒0.02s
-- Get/SetGregサービス追加
-
-ビルドは
-~~~
-cd ~/catkin_ws/src
-catkin_make
-~~~
-
-OKならViewerで見てみる
-~~~
-rosrun image_view image_view image:=/camera/image_raw
-~~~
 
 ======
 ## RoVIのインストール
-### 準備
-1. rosnodejsをインストール
+1. Gitからチェックアウト(israfelブランチ)
 ~~~
-cd ~
-npm install rosnodejs
+ git clone -b israfel --depth 1 https://github.com/YOODS/rovi.git
 ~~~
-- このパッケージはパッチが要るので注意。以下のようにパッチします。
-~~~
-cd ~
-git clone https://github.com/RethinkRobotics-opensource/rosnodejs
-cd ~/node_modules/rosnodejs
-rm -rf dist
-cp -a ~/rosnodejs/src/ dist
-~~~
-2. js-yamlをインストール
-~~~
-cd ~
-npm install js-yaml
-~~~
-### RoVIのインストール
-1. Gitからチェックアウト
-~~~
- git clone https://github.com/YOODS/rovi.git
- git checkout -m matriel
-~~~
-2. Eigenをインストール
-~~~
-cd ~/catkin_ws/src/rovi
-wget http://bitbucket.org/eigen/eigen/get/3.3.4.tar.gz
-tar xvzf 3.3.4.tar.gz
-mkdir include
-mv eigen-eigen-5a0156e40feb/Eigen/ include
-rm -rf eigen-eigen-5a0156e40feb/ 3.3.4.tar.gz
-~~~
-3. voxel...をビルド
-~~~
-cd voxel-noise_reduction
-make
-cp yodpy2.so ~/catkin_ws/devel/lib/python2.7/dist-packages/
-~~~
-4. 全部ビルドしてみよう
-~~~
-cd ~/catkin_ws
-catkin_make
-~~~
-
-### RoVI実行
-1. Network設定
-デフォルトのカメラのIPアドレスは**192.168.222.1**です。PC側もそれに合わせて設定します。
-
-カメラはラージパケットで転送してくるので、**MTU=9000**に設定します。
-
-2. Launch
-~~~
-roslaunch rovi ycamctl.js ycam3
-~~~
-### Topics(to subscribe)
-### Topics(to publish)
+あとはroviのREADMEのとおりインストールを続ける
