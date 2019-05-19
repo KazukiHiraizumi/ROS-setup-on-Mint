@@ -185,6 +185,10 @@ pipがなければまずpipをインストール
 ~~~
 sudo apt install python-pip python-dev
 ~~~
+pipのversionは9.0.1以上が必要になる。低い場合はアップデートする。
+~~~
+pip install pip==9.0.3 --user
+~~~
 
 ======
 ## RoVIのインストール
