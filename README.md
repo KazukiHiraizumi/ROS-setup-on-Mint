@@ -69,20 +69,7 @@ sudo apt upgrade
 sudo apt update
 ~~~
 
-### ツール・ライブラリの追加
-
-後々のために以下を追加する
-  - g++
-  - git
-  - automake
-  - intltool
-  - libgsreamer*-dev
-~~~
-sudo apt install g++ git automake intltool libgstreamer*-dev
-~~~
-
-### 電源管理
-
+### 電源管理  
 スタートメニュー⇒設定⇒電源管理
   - 一般  
   スリープモードは"ハイバネート"を選択
@@ -93,12 +80,22 @@ sudo apt install g++ git automake intltool libgstreamer*-dev
   - Secuity  
   LightLocker"しない"を選択
 
-### デスクトップ切り替え
-
+### デスクトップ切り替え  
 タスクバー⇒パネル⇒新しいアイテムの追加  
 ワークスペーススイッチャを追加
 
-## ソフトウェア追加
+## ツール・ライブラリの追加  
+### ビルド環境  
+後々のために以下を追加する
+  - g++
+  - git
+  - automake
+  - intltool
+  - libgsreamer*-dev
+~~~
+sudo apt install g++ git automake intltool libgstreamer*-dev
+~~~
+
 ### Chrome　　
 デフォルトのFoxがGithubのサポート外になっているので、ブラウザを更新
 ~~~
@@ -108,7 +105,7 @@ sudo apt-get update
 sudo apt-get install google-chrome-stable
 ~~~
 
-### Nodejsインストール　　
+### Nodejsインストール  
 現時点(Sep18)でのHeadはNode9なので9を入れる
 ~~~
 cd ~
@@ -116,15 +113,23 @@ curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
 sudo apt-get install nodejs
 ~~~
 
+### Pythonパッケージャ追加　　
+pipがなければまずpipをインストール
+~~~
+sudo apt install python-pip python-dev
+~~~
+pipのversionは9.0.1以上が必要になる。低い場合はアップデートする。
+~~~
+pip install pip==9.0.3 --user
+~~~
+
 ======
 
-## インストール ROS
-
+## インストール ROS  
 ROSのリリースはKineticが前提です。  
 http://wiki.ros.org/kinetic/Installation/Ubuntuに手順がありますが、Mintに入れるので若干修正が要ります。
 
-### Repos設定
-
+### Repos設定  
 先のページでは
 ~~~
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
@@ -142,8 +147,7 @@ sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C
 もしエラーになったら、キーサーバを"hkp://pgp.mit.edu:80"とか"hkp://keyserver.ubuntu.com:80"でやってみるそう。
 
 
-### インストール
-
+### インストール  
 フルセットでOKです
 ~~~
 sudo apt-get update
@@ -160,15 +164,7 @@ rosdep update
 rosdep --os=ubuntu:xenial  ....
 ~~~
 
-### catkin初期化
-~~~
-cd ~
-mkdir -p catkin_ws/src
-cd catkin_ws/src
-catkin_init_workspace
-~~~
-
-### アカウントの初期設定
+### アカウントの初期設定  
 .bashrcの最後に以下を入れる
 ~~~
 source /opt/ros/kinetic/setup.bash
@@ -178,16 +174,14 @@ export ROS_MASTER_URI=http://localhost:11311
 export NODE_PATH=/usr/lib/node_modules
 export PYTHONPATH=/usr/local/lib/python2.7/dist-packages:$PYTHONPATH
 ~~~
+反映させるため、一旦ターミナルを閉じ、新しいターミナルを開く。
 
-### Pythonパッケージ追加
-
-pipがなければまずpipをインストール
+### catkin初期化
 ~~~
-sudo apt install python-pip python-dev
-~~~
-pipのversionは9.0.1以上が必要になる。低い場合はアップデートする。
-~~~
-pip install pip==9.0.3 --user
+cd ~
+mkdir -p catkin_ws/src
+cd catkin_ws/src
+catkin_init_workspace
 ~~~
 
 ======
